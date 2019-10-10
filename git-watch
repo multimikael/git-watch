@@ -1,0 +1,16 @@
+#!/bin/bash
+icon="software-update-available"
+for f in $(cat ~/.git-watch | sed "/^\s*$/d")
+do
+    cd $f
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    name=$(basename $(pwd))
+    remote=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
+
+    git fetch
+    log=$(git log -1 HEAD..$remote --pretty=format:"%s (%an)")
+
+    if [ $(echo "$log" | sed "/^\s*$/d" | wc -l ) -gt 0 ]; then
+        notify-send -a git-watch -i "$icon" "New commits in $name/$branch" "$log"
+    fi
+done

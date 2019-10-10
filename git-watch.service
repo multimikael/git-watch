@@ -1,0 +1,9 @@
+[Unit]
+Description=Fetch new commits of watched git repositories.
+
+[Service]
+Type=oneshot
+ExecStart=git-watch #Only works if git-watch is in systemd aware PATH
+
+[Install]
+WantedBy=default.target
